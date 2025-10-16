@@ -16,10 +16,15 @@ class Task extends Model
     use HasFactory;
     use SoftDeletes;
 
-    public const PRIORITY_P1 = 'p1';
-    public const PRIORITY_P2 = 'p2';
-    public const PRIORITY_P3 = 'p3';
-    public const PRIORITY_P4 = 'p4';
+    public const PRIORITY_NORMAL = 'normal';
+    public const PRIORITY_IMPORTANT = 'important';
+    public const PRIORITY_URGENT = 'urgent';
+
+    public const PRIORITIES = [
+        self::PRIORITY_NORMAL,
+        self::PRIORITY_IMPORTANT,
+        self::PRIORITY_URGENT,
+    ];
 
     public const STATUS_PLANNED = 'planned';
     public const STATUS_IN_PROGRESS = 'in_progress';

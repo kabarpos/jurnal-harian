@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Planner\TimeBlocksPage;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Livewire\Volt\Volt;
@@ -13,6 +14,10 @@ Route::view('dashboard', 'dashboard')
     ->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('time-blocks', TimeBlocksPage::class)
+        ->middleware(['verified'])
+        ->name('time-blocks');
+
     Route::redirect('settings', 'settings/profile');
 
     Volt::route('settings/profile', 'settings.profile')->name('profile.edit');

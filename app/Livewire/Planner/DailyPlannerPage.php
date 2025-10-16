@@ -3,10 +3,8 @@
 namespace App\Livewire\Planner;
 
 use App\Models\Task;
-use App\Services\TimeBlockService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Carbon;
-use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -18,24 +16,15 @@ class DailyPlannerPage extends Component
 
     public string $newBacklogTaskTitle = '';
 
-    public string $newTaskPriority = Task::PRIORITY_P3;
+    public string $newTaskPriority = Task::PRIORITY_NORMAL;
 
     public ?int $newTaskProjectId = null;
 
-    public ?int $newTimeBlockTaskId = null;
+    public ?int $editingTaskId = null;
 
-    public string $newTimeBlockStart = '09:00';
+    public string $editingTaskTitle = '';
 
-    public string $newTimeBlockEnd = '10:00';
-
-    public string $newTimeBlockNote = '';
-
-    protected TimeBlockService $timeBlockService;
-
-    public function boot(TimeBlockService $timeBlockService): void
-    {
-        $this->timeBlockService = $timeBlockService;
-    }
+    public string $editingTaskPriority = Task::PRIORITY_NORMAL;
 
     public function mount(): void
     {
@@ -66,7 +55,7 @@ class DailyPlannerPage extends Component
 
         $this->validate([
             'newPlannedTaskTitle' => ['required', 'string', 'max:255'],
-            'newTaskPriority' => ['required', 'in:p1,p2,p3,p4'],
+            'newTaskPriority' => ['required', 'in:'.implode(',', Task::PRIORITIES)],
         ]);
 
         $user->tasks()->create([
@@ -78,6 +67,7 @@ class DailyPlannerPage extends Component
         ]);
 
         $this->newPlannedTaskTitle = '';
+        $this->newTaskPriority = Task::PRIORITY_NORMAL;
         $this->dispatch('toast', body: __('Task planned for :date', ['date' => $this->selectedDate]));
     }
 
@@ -90,7 +80,7 @@ class DailyPlannerPage extends Component
 
         $this->validate([
             'newBacklogTaskTitle' => ['required', 'string', 'max:255'],
-            'newTaskPriority' => ['required', 'in:p1,p2,p3,p4'],
+            'newTaskPriority' => ['required', 'in:'.implode(',', Task::PRIORITIES)],
         ]);
 
         $user->tasks()->create([
@@ -101,7 +91,74 @@ class DailyPlannerPage extends Component
         ]);
 
         $this->newBacklogTaskTitle = '';
+        $this->newTaskPriority = Task::PRIORITY_NORMAL;
         $this->dispatch('toast', body: __('Task added to backlog'));
+    }
+
+    public function startEditingBacklogTask(int $taskId): void
+    {
+        $task = $this->findTask($taskId);
+
+        if (! $task || $task->planned_date !== null) {
+            return;
+        }
+
+        $this->editingTaskId = $task->id;
+        $this->editingTaskTitle = $task->title;
+        $this->editingTaskPriority = $task->priority;
+        $this->resetErrorBag();
+    }
+
+    public function updateBacklogTask(): void
+    {
+        if (! $this->editingTaskId) {
+            return;
+        }
+
+        $task = $this->findTask($this->editingTaskId);
+
+        if (! $task || $task->planned_date !== null) {
+            $this->cancelEditingBacklogTask();
+
+            return;
+        }
+
+        $this->validate([
+            'editingTaskTitle' => ['required', 'string', 'max:255'],
+            'editingTaskPriority' => ['required', 'in:'.implode(',', Task::PRIORITIES)],
+        ]);
+
+        $task->update([
+            'title' => $this->editingTaskTitle,
+            'priority' => $this->editingTaskPriority,
+        ]);
+
+        $this->dispatch('toast', body: __('Backlog task updated'));
+        $this->cancelEditingBacklogTask();
+    }
+
+    public function cancelEditingBacklogTask(): void
+    {
+        $this->editingTaskId = null;
+        $this->editingTaskTitle = '';
+        $this->editingTaskPriority = Task::PRIORITY_NORMAL;
+        $this->resetErrorBag();
+    }
+
+    public function deleteTask(int $taskId): void
+    {
+        $task = $this->findTask($taskId);
+        if (! $task || $task->planned_date !== null) {
+            return;
+        }
+
+        $task->delete();
+
+        if ($this->editingTaskId === $taskId) {
+            $this->cancelEditingBacklogTask();
+        }
+
+        $this->dispatch('toast', body: __('Backlog task removed'));
     }
 
     public function toggleDone(int $taskId): void
@@ -148,57 +205,6 @@ class DailyPlannerPage extends Component
         ]);
     }
 
-    public function createTimeBlock(): void
-    {
-        $user = auth()->user();
-        if (! $user) {
-            return;
-        }
-
-        $this->validate([
-            'newTimeBlockStart' => ['required', 'date_format:H:i'],
-            'newTimeBlockEnd' => ['required', 'date_format:H:i'],
-            'newTimeBlockTaskId' => ['nullable', 'integer'],
-            'newTimeBlockNote' => ['nullable', 'string', 'max:255'],
-        ]);
-
-        if ($this->newTimeBlockTaskId) {
-            $task = $this->findTask($this->newTimeBlockTaskId);
-            if (! $task) {
-                throw ValidationException::withMessages([
-                    'newTimeBlockTaskId' => __('Task not found'),
-                ]);
-            }
-        }
-
-        $start = Carbon::parse("{$this->selectedDate} {$this->newTimeBlockStart}", config('app.timezone'));
-        $end = Carbon::parse("{$this->selectedDate} {$this->newTimeBlockEnd}", config('app.timezone'));
-
-        $this->timeBlockService->create($user, [
-            'task_id' => $this->newTimeBlockTaskId,
-            'start_at' => $start,
-            'end_at' => $end,
-            'note' => $this->newTimeBlockNote,
-        ]);
-
-        $this->newTimeBlockNote = '';
-        $this->dispatch('toast', body: __('Time block created'));
-    }
-
-    public function deleteTimeBlock(int $blockId): void
-    {
-        $user = auth()->user();
-        if (! $user) {
-            return;
-        }
-
-        $block = $user->timeBlocks()->find($blockId);
-
-        if ($block) {
-            $block->delete();
-        }
-    }
-
     public function render(): View
     {
         $user = auth()->user();
@@ -219,15 +225,9 @@ class DailyPlannerPage extends Component
             ->orderBy('created_at')
             ->get();
 
-        $timeBlocks = $user->timeBlocks()
-            ->whereDate('start_at', $this->selectedDate)
-            ->orderBy('start_at')
-            ->get();
-
         return view('livewire.planner.daily-planner-page', [
             'backlogTasks' => $backlogTasks,
             'plannedTasks' => $plannedTasks,
-            'timeBlocks' => $timeBlocks,
         ]);
     }
 

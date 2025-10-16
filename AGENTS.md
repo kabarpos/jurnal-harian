@@ -157,11 +157,10 @@ tests/
 * **Dark mode:** `data-theme="dark"`.
 * **Komponen:** card rounded-2xl, shadow-md, ring-1 on hover, transition-150ms.
 * **Prioritas badge:**
+  * Urgent : bg-red-100 ring-red-300
+  * Important: bg-blue-100 ring-blue-300
+  * Normal: bg-amber-100 ring-amber-300
 
-  * P1: bg-red-100 ring-red-300
-  * P2: bg-blue-100 ring-blue-300
-  * P3: bg-amber-100 ring-amber-300
-  * P4: bg-slate-100 ring-slate-300
 * **Keyboard-first:** `n`, `e`, `space`, `t` (timer), `/` (search), `Shift+C` quick capture modal.
 
 # 9) Standar Kode & Kualitas

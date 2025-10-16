@@ -13,7 +13,7 @@ return new class extends Migration {
             $table->foreignId('project_id')->nullable()->constrained()->nullOnDelete();
             $table->string('title');
             $table->text('description')->nullable();
-            $table->enum('priority', ['p1', 'p2', 'p3', 'p4'])->default('p3');
+            $table->enum('priority', ['normal', 'important', 'urgent'])->default('normal');
             $table->enum('status', ['planned', 'in_progress', 'done', 'canceled'])->default('planned');
             $table->date('planned_date')->nullable();
             $table->date('due_date')->nullable();
