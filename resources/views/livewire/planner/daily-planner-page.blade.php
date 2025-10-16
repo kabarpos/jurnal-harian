@@ -157,16 +157,24 @@
                                         <button
                                             type="button"
                                             wire:click="startEditingBacklogTask({{ $task->id }})"
-                                            class="rounded-lg bg-amber-100 px-2 py-1 text-xs font-medium text-amber-700 transition hover:bg-amber-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400 dark:bg-amber-900/30 dark:text-amber-200 dark:hover:bg-amber-900/50"
+                                            class="rounded-lg bg-amber-100 p-2 text-amber-700 transition hover:bg-amber-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400 dark:bg-amber-900/30 dark:text-amber-200 dark:hover:bg-amber-900/50"
+                                            title="{{ __('Edit task') }}"
                                         >
-                                            {{ __('Edit') }}
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-4" aria-hidden="true">
+                                                <path fill="currentColor" d="M5 19h1.586l10.9-10.9-1.586-1.586L5 17.414zm14.707-11.707-2-2a1 1 0 0 0-1.414 0l-1.586 1.586 3.414 3.414 1.586-1.586a1 1 0 0 0 0-1.414Z"/>
+                                            </svg>
+                                            <span class="sr-only">{{ __('Edit') }}</span>
                                         </button>
                                         <button
                                             type="button"
                                             wire:click="deleteTask({{ $task->id }})"
-                                            class="rounded-lg bg-rose-100 px-2 py-1 text-xs font-medium text-rose-700 transition hover:bg-rose-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-400 dark:bg-rose-900/30 dark:text-rose-200 dark:hover:bg-rose-900/50"
+                                            class="rounded-lg bg-rose-100 p-2 text-rose-700 transition hover:bg-rose-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-400 dark:bg-rose-900/30 dark:text-rose-200 dark:hover:bg-rose-900/50"
+                                            title="{{ __('Delete task') }}"
                                         >
-                                            {{ __('Delete') }}
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-4" aria-hidden="true">
+                                                <path fill="currentColor" d="M9 3h6a1 1 0 0 1 1 1v1h4v2h-1v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7H4V5h4V4a1 1 0 0 1 1-1Zm1 4v11h2V7Zm4 0v11h2V7Z"/>
+                                            </svg>
+                                            <span class="sr-only">{{ __('Delete') }}</span>
                                         </button>
                                     </div>
                                 </div>

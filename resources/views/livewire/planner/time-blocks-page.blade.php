@@ -80,9 +80,20 @@
                         <p class="font-semibold text-neutral-700 dark:text-neutral-200">
                             {{ $block->start_at->format('H:i') }} - {{ $block->end_at->format('H:i') }}
                         </p>
-                        <p class="text-xs text-neutral-500 dark:text-neutral-400">
-                            {{ $block->note ?: ($block->task?->title ?? __('Tanpa catatan')) }}
-                        </p>
+                        @if ($block->task)
+                            <p class="text-xs font-medium text-neutral-600 dark:text-neutral-300">
+                                {{ __('Tugas') }}: {{ $block->task->title }}
+                            </p>
+                        @endif
+                        @if ($block->note)
+                            <p class="text-xs text-neutral-500 dark:text-neutral-400">
+                                {{ $block->note }}
+                            </p>
+                        @elseif (! $block->task)
+                            <p class="text-xs text-neutral-500 dark:text-neutral-400">
+                                {{ __('Tanpa catatan') }}
+                            </p>
+                        @endif
                     </div>
                     <button
                         type="button"
