@@ -30,6 +30,23 @@
                 </flux:navlist.item>
             </flux:navlist>
 
+            <div x-data class="hidden lg:flex items-center justify-end px-2">
+                <button
+                    type="button"
+                    @click="$flux.appearance = $flux.dark ? 'light' : 'dark'"
+                    :aria-label="$flux.dark ? '{{ __('Switch to light mode') }}' : '{{ __('Switch to dark mode') }}'"
+                    class="mouse-pointer inline-flex h-10 w-10 items-center justify-center rounded-full border border-transparent bg-neutral-100 text-neutral-700 transition hover:bg-neutral-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700"
+                >
+                    <svg x-show="$flux.dark" x-cloak xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-5" aria-hidden="true">
+                        <path fill="currentColor" d="M12 18a6 6 0 1 1 6-6a6 6 0 0 1-6 6m0 2a1 1 0 0 1 1 1v1h-2v-1a1 1 0 0 1 1-1M5.64 17l-.7.71l-1.42-1.42l.7-.7a1 1 0 0 1 1.42 1.41M4 12a1 1 0 0 1-1 1H2v-2h1a1 1 0 0 1 1 1m1.64-7.71l-1.42-1.42l1.42-1.41l1.41 1.41a1 1 0 1 1-1.41 1.42M13 2v1a1 1 0 0 1-2 0V2Zm6.36 3.29a1 1 0 0 1-1.41 0a1 1 0 0 1 0-1.42l1.41-1.41l1.42 1.41ZM22 11v2h-1a1 1 0 0 1-1-1a1 1 0 0 1 1-1Zm-1.5 5.29l-1.42 1.42l-1.41-1.42a1 1 0 0 1 1.41-1.41Z"/>
+                    </svg>
+                    <svg x-show="!$flux.dark" x-cloak xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-5" aria-hidden="true">
+                        <path fill="currentColor" d="M10 7a7.002 7.002 0 0 1 6.938 6.312A5 5 0 0 1 9 9.5A4.5 4.5 0 0 1 10 7m1.85-5A9 9 0 1 0 21 13.15a1 1 0 0 0-1.18-1.16A7 7 0 0 1 12 4.18A1 1 0 0 0 11.85 2"/>
+                    </svg>
+                    <span class="sr-only">{{ __('Toggle dark mode') }}</span>
+                </button>
+            </div>
+
             <!-- Desktop User Menu -->
             <flux:dropdown class="hidden lg:block" position="bottom" align="start">
                 <flux:profile
@@ -82,6 +99,23 @@
             <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
 
             <flux:spacer />
+
+            <div x-data class="flex items-center">
+                <button
+                    type="button"
+                    @click="$flux.appearance = $flux.dark ? 'light' : 'dark'"
+                    :aria-label="$flux.dark ? '{{ __('Switch to light mode') }}' : '{{ __('Switch to dark mode') }}'"
+                    class="mouse-pointer inline-flex h-10 w-10 items-center justify-center rounded-full border border-transparent bg-neutral-100 text-neutral-700 transition hover:bg-neutral-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700"
+                >
+                    <svg x-show="$flux.dark" x-cloak xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-5" aria-hidden="true">
+                        <path fill="currentColor" d="M12 18a6 6 0 1 1 6-6a6 6 0 0 1-6 6m0 2a1 1 0 0 1 1 1v1h-2v-1a1 1 0 0 1 1-1M5.64 17l-.7.71l-1.42-1.42l.7-.7a1 1 0 0 1 1.42 1.41M4 12a1 1 0 0 1-1 1H2v-2h1a1 1 0 0 1 1 1m1.64-7.71l-1.42-1.42l1.42-1.41l1.41 1.41a1 1 0 1 1-1.41 1.42M13 2v1a1 1 0 0 1-2 0V2Zm6.36 3.29a1 1 0 0 1-1.41 0a1 1 0 0 1 0-1.42l1.41-1.41l1.42 1.41ZM22 11v2h-1a1 1 0 0 1-1-1a1 1 0 0 1 1-1Zm-1.5 5.29l-1.42 1.42l-1.41-1.42a1 1 0 0 1 1.41-1.41Z"/>
+                    </svg>
+                    <svg x-show="!$flux.dark" x-cloak xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-5" aria-hidden="true">
+                        <path fill="currentColor" d="M10 7a7.002 7.002 0 0 1 6.938 6.312A5 5 0 0 1 9 9.5A4.5 4.5 0 0 1 10 7m1.85-5A9 9 0 1 0 21 13.15a1 1 0 0 0-1.18-1.16A7 7 0 0 1 12 4.18A1 1 0 0 0 11.85 2"/>
+                    </svg>
+                    <span class="sr-only">{{ __('Toggle dark mode') }}</span>
+                </button>
+            </div>
 
             <flux:dropdown position="top" align="end">
                 <flux:profile
