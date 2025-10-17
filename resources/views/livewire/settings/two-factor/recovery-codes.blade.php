@@ -70,6 +70,7 @@ new class extends Component {
                 @click="showRecoveryCodes = true;"
                 aria-expanded="false"
                 aria-controls="recovery-codes-section"
+                class="mouse-pointer"
             >
                 {{ __('View Recovery Codes') }}
             </flux:button>
@@ -82,6 +83,7 @@ new class extends Component {
                 @click="showRecoveryCodes = false"
                 aria-expanded="true"
                 aria-controls="recovery-codes-section"
+                class="mouse-pointer"
             >
                 {{ __('Hide Recovery Codes') }}
             </flux:button>
@@ -92,6 +94,7 @@ new class extends Component {
                     icon="arrow-path"
                     variant="filled"
                     wire:click="regenerateRecoveryCodes"
+                    class="mouse-pointer"
                 >
                     {{ __('Regenerate Codes') }}
                 </flux:button>

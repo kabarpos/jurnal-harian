@@ -43,7 +43,7 @@
 
                 <label class="sm:col-span-2 space-y-1">
                     <span class="block text-xs text-neutral-500 dark:text-neutral-300">{{ __('Tautkan ke tugas (opsional)') }}</span>
-                    <select wire:model.defer="newTimeBlockTaskId" class="w-full rounded-lg border border-neutral-300 bg-white px-2 py-2 dark:border-neutral-700 dark:bg-neutral-900">
+                    <select wire:model.defer="newTimeBlockTaskId" class="w-full rounded-lg border border-neutral-300 bg-white px-2 py-2 text-sm text-neutral-700 transition focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-200 dark:focus:border-primary-500 dark:focus:ring-primary-500">
                         <option value="">{{ __('Tidak ada') }}</option>
                         @foreach ($tasks as $task)
                             <option value="{{ $task->id }}">
@@ -98,7 +98,7 @@
                     <button
                         type="button"
                         wire:click="deleteTimeBlock({{ $block->id }})"
-                        class="rounded-lg bg-rose-100 px-2 py-1 text-xs font-medium text-rose-700 transition hover:bg-rose-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-400 dark:bg-rose-900/30 dark:text-rose-200 dark:hover:bg-rose-900/50"
+                        class="mouse-pointer rounded-lg bg-rose-100 px-2 py-1 text-xs font-medium text-rose-700 transition hover:bg-rose-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-400 dark:bg-rose-900/30 dark:text-rose-200 dark:hover:bg-rose-900/50"
                     >
                         {{ __('Hapus') }}
                     </button>

@@ -13,6 +13,20 @@
         \App\Models\Task::PRIORITY_IMPORTANT => 'bg-amber-100 text-amber-700 ring-1 ring-amber-300',
         \App\Models\Task::PRIORITY_URGENT => 'bg-rose-100 text-rose-700 ring-1 ring-rose-300',
     ];
+    $legacyPriorityMap = [
+        'p1' => \App\Models\Task::PRIORITY_URGENT,
+        'p2' => \App\Models\Task::PRIORITY_IMPORTANT,
+        'p3' => \App\Models\Task::PRIORITY_NORMAL,
+        'p4' => \App\Models\Task::PRIORITY_NORMAL,
+    ];
+
+    foreach ($legacyPriorityMap as $legacyValue => $normalizedValue) {
+        $priorityLabels[$legacyValue] = $priorityLabels[$normalizedValue];
+        $priorityBadgeClasses[$legacyValue] = $priorityBadgeClasses[$normalizedValue];
+
+        $priorityLabels[strtoupper($legacyValue)] = $priorityLabels[$normalizedValue];
+        $priorityBadgeClasses[strtoupper($legacyValue)] = $priorityBadgeClasses[$normalizedValue];
+    }
 @endphp
 
 <div class="flex h-full flex-col gap-6">
@@ -56,7 +70,7 @@
                     >
                     <select
                         wire:model.defer="newTaskPriority"
-                        class="rounded-lg border border-neutral-300 bg-transparent px-2 py-2 text-xs font-medium dark:border-neutral-700"
+                        class="rounded-lg border border-neutral-300 bg-neutral-50 px-2 py-2 text-xs font-medium text-neutral-700 transition dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-200 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200 dark:focus:border-primary-500 dark:focus:ring-primary-500"
                     >
                         @foreach (\App\Models\Task::PRIORITIES as $priority)
                             <option value="{{ $priority }}">{{ $priorityLabels[$priority] }}</option>
@@ -69,7 +83,7 @@
 
                 <div class="flex flex-col gap-2 overflow-y-auto">
                     @forelse ($backlogTasks as $task)
-                        <div class="rounded-xl border border-neutral-200 bg-neutral-50 p-3 text-sm shadow-sm transition hover:border-primary-200 hover:bg-white dark:border-neutral-700 dark:bg-neutral-800 dark:hover:border-primary-500">
+                        <div class="rounded-xl border border-neutral-200 bg-neutral-50 p-3 text-sm shadow-sm transition hover:border-primary-200 hover:bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-800 dark:hover:border-primary-500 dark:hover:bg-neutral-700">
                             @if ($editingTaskId === $task->id)
                                 <form wire:submit.prevent="updateBacklogTask" class="flex flex-col gap-2">
                                     <input
@@ -86,7 +100,7 @@
                                         <div class="flex flex-col gap-1 sm:w-48">
                                             <select
                                                 wire:model.defer="editingTaskPriority"
-                                                class="rounded-lg border border-neutral-300 bg-transparent px-2 py-2 text-xs font-medium dark:border-neutral-700"
+                                                class="rounded-lg border border-neutral-300 bg-neutral-50 px-2 py-2 text-xs font-medium text-neutral-700 transition dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-200 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200 dark:focus:border-primary-500 dark:focus:ring-primary-500"
                                             >
                                                 @foreach (\App\Models\Task::PRIORITIES as $priority)
                                                     <option value="{{ $priority }}">{{ $priorityLabels[$priority] }}</option>
@@ -100,7 +114,7 @@
                                             <button
                                                 type="button"
                                                 wire:click="cancelEditingBacklogTask"
-                                                class="rounded-lg border border-neutral-300 px-3 py-2 text-xs font-medium text-neutral-600 transition hover:border-neutral-400 hover:text-neutral-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-400 dark:border-neutral-600 dark:text-neutral-300 dark:hover:border-neutral-500"
+                                                class="mouse-pointer rounded-lg border border-neutral-300 px-3 py-2 text-xs font-medium text-neutral-600 transition hover:border-neutral-400 hover:text-neutral-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-400 dark:border-neutral-600 dark:text-neutral-300 dark:hover:border-neutral-500"
                                             >
                                                 {{ __('Cancel') }}
                                             </button>
@@ -119,7 +133,7 @@
                                         <button
                                             type="button"
                                             wire:click="toggleDone({{ $task->id }})"
-                                            class="flex size-7 items-center justify-center rounded-full border {{ $task->status === \App\Models\Task::STATUS_DONE ? 'border-green-500 bg-green-500 text-white' : 'border-neutral-300 text-neutral-500 dark:border-neutral-600' }}"
+                                            class="mouse-pointer flex size-7 items-center justify-center rounded-full border {{ $task->status === \App\Models\Task::STATUS_DONE ? 'border-green-500 bg-green-500 text-white' : 'border-neutral-300 text-neutral-500 dark:border-neutral-600' }}"
                                             title="{{ __('Toggle status') }}"
                                         >
                                             @if ($task->status === \App\Models\Task::STATUS_DONE)
@@ -150,25 +164,25 @@
                                         <button
                                             type="button"
                                             wire:click="planTask({{ $task->id }})"
-                                            class="rounded-lg bg-sky-100 px-2 py-1 text-xs font-medium text-sky-700 transition hover:bg-sky-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400 dark:bg-sky-900/40 dark:text-sky-300 dark:hover:bg-sky-900/60"
+                                            class="mouse-pointer rounded-lg bg-sky-100 px-2 py-1 text-xs font-medium text-sky-700 transition hover:bg-sky-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400 dark:bg-sky-900/40 dark:text-sky-300 dark:hover:bg-sky-900/60"
                                         >
                                             {{ __('Plan for :date', ['date' => $selectedDateCarbon->format('D')]) }}
                                         </button>
                                         <button
                                             type="button"
                                             wire:click="startEditingBacklogTask({{ $task->id }})"
-                                            class="rounded-lg bg-amber-100 p-2 text-amber-700 transition hover:bg-amber-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400 dark:bg-amber-900/30 dark:text-amber-200 dark:hover:bg-amber-900/50"
+                                            class="mouse-pointer rounded-lg bg-amber-100 p-2 text-amber-700 transition hover:bg-amber-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400 dark:bg-amber-900/30 dark:text-amber-200 dark:hover:bg-amber-900/50"
                                             title="{{ __('Edit task') }}"
                                         >
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-4" aria-hidden="true">
-                                                <path fill="currentColor" d="M5 19h1.586l10.9-10.9-1.586-1.586L5 17.414zm14.707-11.707-2-2a1 1 0 0 0-1.414 0l-1.586 1.586 3.414 3.414 1.586-1.586a1 1 0 0 0 0-1.414Z"/>
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-4 mouse-pointer" aria-hidden="true">
+                                              <path fill="currentColor" d="M21 12a1 1 0 0 0-1 1v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h6a1 1 0 0 0 0-2H5a3 3 0 0 0-3 3v14a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-6a1 1 0 0 0-1-1m-15 .76V17a1 1 0 0 0 1 1h4.24a1 1 0 0 0 .71-.29l6.92-6.93L21.71 8a1 1 0 0 0 0-1.42l-4.24-4.29a1 1 0 0 0-1.42 0l-2.82 2.83l-6.94 6.93a1 1 0 0 0-.29.71m10.76-8.35l2.83 2.83l-1.42 1.42l-2.83-2.83ZM8 13.17l5.93-5.93l2.83 2.83L10.83 16H8Z"/>
                                             </svg>
                                             <span class="sr-only">{{ __('Edit') }}</span>
                                         </button>
                                         <button
                                             type="button"
                                             wire:click="deleteTask({{ $task->id }})"
-                                            class="rounded-lg bg-rose-100 p-2 text-rose-700 transition hover:bg-rose-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-400 dark:bg-rose-900/30 dark:text-rose-200 dark:hover:bg-rose-900/50"
+                                            class="mouse-pointer rounded-lg bg-rose-100 p-2 text-rose-700 transition hover:bg-rose-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-400 dark:bg-rose-900/30 dark:text-rose-200 dark:hover:bg-rose-900/50"
                                             title="{{ __('Delete task') }}"
                                         >
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-4" aria-hidden="true">
@@ -206,7 +220,7 @@
                     >
                     <select
                         wire:model.defer="newTaskPriority"
-                        class="rounded-lg border border-neutral-300 bg-transparent px-2 py-2 text-xs font-medium dark:border-neutral-700"
+                        class="rounded-lg border border-neutral-300 bg-neutral-50 px-2 py-2 text-xs font-medium text-neutral-700 transition dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-200 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200 dark:focus:border-primary-500 dark:focus:ring-primary-500"
                     >
                         @foreach (\App\Models\Task::PRIORITIES as $priority)
                             <option value="{{ $priority }}">{{ $priorityLabels[$priority] }}</option>
@@ -223,7 +237,7 @@
                             <button
                                 type="button"
                                 wire:click="toggleDone({{ $task->id }})"
-                                class="mt-1 flex size-7 items-center justify-center rounded-full border {{ $task->status === \App\Models\Task::STATUS_DONE ? 'border-green-500 bg-green-500 text-white' : 'border-neutral-300 text-neutral-500 dark:border-neutral-600' }}"
+                                class="mouse-pointer mt-1 flex size-7 items-center justify-center rounded-full border {{ $task->status === \App\Models\Task::STATUS_DONE ? 'border-green-500 bg-green-500 text-white' : 'border-neutral-300 text-neutral-500 dark:border-neutral-600' }}"
                             >
                                 @if ($task->status === \App\Models\Task::STATUS_DONE)
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-4" aria-hidden="true" focusable="false">
@@ -257,7 +271,7 @@
                                 <button
                                     type="button"
                                     wire:click="moveTaskToBacklog({{ $task->id }})"
-                                    class="rounded-lg border border-neutral-200 px-2 py-1 text-xs text-neutral-500 transition hover:border-neutral-300 hover:text-neutral-700 dark:border-neutral-700 dark:text-neutral-300"
+                                    class="mouse-pointer rounded-lg border border-neutral-200 px-2 py-1 text-xs text-neutral-500 transition hover:border-neutral-300 hover:text-neutral-700 dark:border-neutral-700 dark:text-neutral-300"
                                 >
                                     {{ __('Backlog') }}
                                 </button>
