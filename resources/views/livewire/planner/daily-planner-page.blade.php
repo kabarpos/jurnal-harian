@@ -33,7 +33,7 @@
     <header class="flex flex-wrap items-center gap-4">
         <flux:heading size="xl">{{ __('Daily Planner') }}</flux:heading>
 
-        <div class="flex items-center gap-3">
+        <div class="ml-auto flex items-center gap-3">
             <label class="text-sm font-medium text-neutral-500 dark:text-neutral-400" for="planner-date">
                 {{ __('Focus date') }}
             </label>
@@ -45,12 +45,7 @@
             >
         </div>
 
-        <div class="ml-auto flex gap-3 text-xs text-neutral-500 dark:text-neutral-400">
-            <span>{{ __('Shortcuts:') }}</span>
-            <span><kbd class="rounded border px-1">n</kbd> {{ __('new task') }}</span>
-            <span><kbd class="rounded border px-1">space</kbd> {{ __('toggle status') }}</span>
-            <span><kbd class="rounded border px-1">{{ __('/') }}</kbd> {{ __('focus search') }}</span>
-        </div>
+
     </header>
 
     <section class="grid gap-6 xl:grid-cols-2">

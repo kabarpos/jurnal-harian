@@ -9,7 +9,7 @@
     <header class="flex flex-wrap items-center gap-4">
         <flux:heading size="xl">{{ __('Time Blocks') }}</flux:heading>
 
-        <div class="flex items-center gap-3">
+        <div class="ml-auto flex items-center gap-3">
             <label class="text-sm font-medium text-neutral-500 dark:text-neutral-400" for="time-block-date">
                 {{ __('Tanggal') }}
             </label>
@@ -21,9 +21,7 @@
             >
         </div>
 
-        <div class="ml-auto text-xs text-neutral-500 dark:text-neutral-400">
-            {{ __('Blok waktu membantu kamu menjaga fokus tiap sesi.') }}
-        </div>
+
     </header>
 
     <div class="grid gap-6 lg:grid-cols-2">
@@ -112,3 +110,4 @@
     </section>
 </div>
 </div>
+
